@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fly_buy_brand_project/ul%20designs/bottom_navigationbar.dart';
 import 'package:fly_buy_brand_project/ul%20designs/home_page.dart';
 
 void main() {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const HomePage(),
+        home: const BottomNavigationbar(),
       ),
     );
   }
