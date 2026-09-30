@@ -28,14 +28,14 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          padding: const EdgeInsets.fromLTRB(40, 8, 40, 12),
           child: Container(
-            height: 70,
+            height: 62,
 
             decoration: BoxDecoration(
               color: const Color(0xff171B22),
 
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(32),
 
               border: Border.all(
                 color: Colors.white.withOpacity(0.08),
@@ -44,9 +44,9 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.35),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: Colors.black.withOpacity(0.30),
+                  blurRadius: 15,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
@@ -110,13 +110,13 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
 
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
 
         decoration: BoxDecoration(
           color:
               isSelected ? Colors.white.withOpacity(0.10) : Colors.transparent,
 
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
 
           border:
               isSelected
@@ -133,17 +133,14 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
               child: Icon(
                 isSelected ? activeIcon : icon,
-
                 key: ValueKey(isSelected),
-
                 color:
                     isSelected ? Colors.white : Colors.white.withOpacity(0.45),
-
-                size: 24,
+                size: 21,
               ),
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
 
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
@@ -152,7 +149,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
                 color:
                     isSelected ? Colors.white : Colors.white.withOpacity(0.45),
 
-                fontSize: 10,
+                fontSize: 9,
 
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),

@@ -171,23 +171,18 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
+              print('Menu');
+            },
+            icon: Icon(Icons.search, color: Colors.white, size: 24.sp),
+          ),
+          IconButton(
+            onPressed: () {
               print('Shopping bag');
             },
             icon: Icon(
               Icons.shopping_bag_outlined,
-              color: const Color(0xffB87820),
+              color: Colors.white,
               size: 23.sp,
-            ),
-          ),
-
-          IconButton(
-            onPressed: () {
-              print('Menu');
-            },
-            icon: Icon(
-              Icons.menu_rounded,
-              color: const Color(0xffB87820),
-              size: 24.sp,
             ),
           ),
 
@@ -638,7 +633,7 @@ class _HomePageState extends State<HomePage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xff171B22),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10.r),
       ),
 
@@ -726,7 +721,7 @@ class _HomePageState extends State<HomePage> {
                   overflow: TextOverflow.ellipsis,
 
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                   ),
@@ -740,7 +735,7 @@ class _HomePageState extends State<HomePage> {
                       '₹$price',
 
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w700,
                       ),
@@ -752,7 +747,7 @@ class _HomePageState extends State<HomePage> {
                       '₹$oldPrice',
 
                       style: TextStyle(
-                        color: Colors.white38,
+                        color: Colors.black26,
                         fontSize: 11.sp,
                         decoration: TextDecoration.lineThrough,
                       ),
