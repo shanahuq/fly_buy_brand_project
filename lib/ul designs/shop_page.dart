@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+class Category {
+  final String name;
+  final List<String> subcategories;
+
+  const Category({required this.name, this.subcategories = const []});
+
+  bool get hasSubcategories => subcategories.isNotEmpty;
+}
+
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
 
@@ -23,17 +32,87 @@ class _ShopPageState extends State<ShopPage> {
   // CATEGORY
   // ==========================================================
 
-  int selectedCategory = 0;
+  int selectedCategoryIndex = 0;
+  String? selectedSubcategory;
 
-  final List<String> categories = [
-    'All Products',
-    'E-Cigs',
-    'Gadgets',
-    'Games & Gifts',
-    'Home-Kitchen',
-    'KIDS',
-    'MEN',
-    'WOMEN',
+  final List<Category> categories = [
+    // ==========================================================
+    // ALL PRODUCTS
+    // ==========================================================
+    Category(name: 'All Products'),
+
+    // ==========================================================
+    // E-CIGS
+    // ==========================================================
+    Category(name: 'E-Cigs', subcategories: ['Vape']),
+
+    // ==========================================================
+    // GADGETS
+    // ==========================================================
+    Category(
+      name: 'Gadgets',
+      subcategories: [
+        // Add gadget subcategories here later
+      ],
+    ),
+
+    // ==========================================================
+    // GAMES & GIFTS
+    // ==========================================================
+    Category(
+      name: 'Games & Gifts',
+      subcategories: [
+        // Add game/gift subcategories here later
+      ],
+    ),
+
+    // ==========================================================
+    // HOME-KITCHEN
+    // ==========================================================
+    Category(
+      name: 'Home-Kitchen',
+      subcategories: ['Bedsheets', 'Home Appliance'],
+    ),
+
+    // ==========================================================
+    // KIDS
+    // ==========================================================
+    Category(name: 'KIDS', subcategories: ['Footware']),
+
+    // ==========================================================
+    // MEN
+    // ==========================================================
+    Category(
+      name: 'MEN',
+      subcategories: [
+        'Exclusive Watches',
+        'Footware',
+        'Outfits',
+        'Perfume',
+        'Perfume & Jewellers',
+        'Premium-Shirts',
+        'Shoes For men',
+        'Sunglass & Frames',
+        'Wallet & Belts',
+        'Watches',
+      ],
+    ),
+
+    // ==========================================================
+    // WOMEN
+    // ==========================================================
+    Category(
+      name: 'WOMEN',
+      subcategories: [
+        'Bags & Backpacks',
+        'Cosmetics',
+        'Footware',
+        'Outfits',
+        'PARDHA',
+        'Perfume',
+        'jewellers',
+      ],
+    ),
   ];
 
   // ==========================================================
@@ -42,8 +121,9 @@ class _ShopPageState extends State<ShopPage> {
 
   final List<Map<String, dynamic>> products = [
     {
-      'image': 'assets/products/bag.jpg',
-      'category': 'LEATHER GOODS',
+      'image': 'assets/leather_goods_image.jpg',
+      'category': 'WOMEN',
+      'subcategory': 'Bags & Backpacks',
       'name': 'CHANEL CLASSIC FLAP',
       'description': 'Black Lambskin & Gold',
       'price': 24999,
@@ -52,8 +132,10 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 84,
     },
     {
-      'image': 'assets/products/watch.jpg',
-      'category': 'TIMEPIECES',
+      'image': 'assets/timepieces_image.jpg',
+      'category': 'MEN',
+      'subcategory': 'Watches',
+
       'name': 'AURORA AUTOMATIC',
       'description': 'Rose Gold - Turquoise Edition',
       'price': 18450,
@@ -62,8 +144,10 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 52,
     },
     {
-      'image': 'assets/products/sunglasses1.jpg',
-      'category': 'SUNGLASS',
+      'image': 'assets/cartier_sunglass.jpg',
+      'category': 'MEN',
+      'subcategory': 'Sunglass & Frames',
+
       'name': 'CARTIER VENDÔME GOLD',
       'description': 'Tortoiseshell & 24K Accent',
       'price': 4999,
@@ -72,8 +156,10 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 101,
     },
     {
-      'image': 'assets/products/sunglasses2.jpg',
-      'category': 'SUNGLASS',
+      'image': 'assets/prada_sunglass.jpg',
+      'category': 'MEN',
+      'subcategory': 'Sunglass & Frames',
+
       'name': 'PRADA RUNWAY SQUARE',
       'description': 'Gloss Acetate Black',
       'price': 3999,
@@ -82,8 +168,10 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 120,
     },
     {
-      'image': 'assets/products/sunglasses3.jpg',
-      'category': 'SUNGLASS',
+      'image': 'assets/sunglasses_image.jpg',
+      'category': 'MEN',
+      'subcategory': 'Sunglass & Frames',
+
       'name': 'FBB SIGNATURE BLACK',
       'description': 'Premium Black Acetate',
       'price': 4499,
@@ -92,8 +180,10 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 78,
     },
     {
-      'image': 'assets/products/sunglasses4.jpg',
-      'category': 'SUNGLASS',
+      'image': 'assets/gucci_sunglass.jpg',
+      'category': 'MEN',
+      'subcategory': 'Sunglass & Frames',
+
       'name': 'GUCCI AVIATOR',
       'description': 'Classic Luxury Edition',
       'price': 5299,
@@ -102,6 +192,28 @@ class _ShopPageState extends State<ShopPage> {
       'reviews': 90,
     },
   ];
+
+  List<Map<String, dynamic>> get filteredProducts {
+    // ALL PRODUCTS
+    if (selectedCategoryIndex == 0) {
+      return products;
+    }
+
+    final String selectedCategory = categories[selectedCategoryIndex].name;
+
+    // CATEGORY + SUBCATEGORY
+    if (selectedSubcategory != null) {
+      return products.where((product) {
+        return product['category'] == selectedCategory &&
+            product['subcategory'] == selectedSubcategory;
+      }).toList();
+    }
+
+    // CATEGORY ONLY
+    return products.where((product) {
+      return product['category'] == selectedCategory;
+    }).toList();
+  }
 
   // ==========================================================
   // BUILD
@@ -247,13 +359,9 @@ class _ShopPageState extends State<ShopPage> {
 
                 SizedBox(height: 24.h),
 
-                SizedBox(height: 5.h),
-
-                Text(
-                  'Discover our curated collection of premium products',
-                  style: TextStyle(color: Colors.black45, fontSize: 12.sp),
-                ),
-
+                // ==================================================
+                // CATEGORY HEADER
+                // ==================================================
                 // ==================================================
                 // CATEGORY HEADER
                 // ==================================================
@@ -270,8 +378,44 @@ class _ShopPageState extends State<ShopPage> {
 
                     const Spacer(),
 
+                    _buildFilterButton(),
+                  ],
+                ),
+
+                SizedBox(height: 14.h),
+
+                // ==================================================
+                // HORIZONTAL CATEGORIES
+                // ==================================================
+                _buildCategories(),
+
+                SizedBox(height: 26.h),
+
+                // ==================================================
+                // PRODUCT HEADER
+                // ==================================================
+                Row(
+                  children: [
+                    Text(
+                      selectedSubcategory != null
+                          ? selectedSubcategory!
+                          : categories[selectedCategoryIndex].name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    const Spacer(),
+
                     GestureDetector(
-                      onTap: _openFilter,
+                      onTap: () {
+                        setState(() {
+                          selectedCategoryIndex = 0;
+                          selectedSubcategory = null;
+                        });
+                      },
                       child: Row(
                         children: [
                           Text(
@@ -297,37 +441,6 @@ class _ShopPageState extends State<ShopPage> {
                 SizedBox(height: 12.h),
 
                 // ==================================================
-                // CATEGORIES
-                // ==================================================
-                _buildCategories(),
-
-                SizedBox(height: 26.h),
-
-                // ==================================================
-                // PRODUCT HEADER
-                // ==================================================
-                Row(
-                  children: [
-                    Text(
-                      selectedCategory == 0
-                          ? 'All Products'
-                          : categories[selectedCategory],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    _buildFilterButton(),
-                  ],
-                ),
-
-                SizedBox(height: 12.h),
-
-                // ==================================================
                 // PRODUCT GRID
                 // ==================================================
                 _buildProductGrid(),
@@ -344,14 +457,11 @@ class _ShopPageState extends State<ShopPage> {
                 // ==================================================
                 // TRUST FEATURES
                 // ==================================================
-                _buildTrustSection(),
-
                 SizedBox(height: 25.h),
 
                 // ==================================================
                 // FOOTER
                 // ==================================================
-                _buildFooter(),
               ],
             ),
           ),
@@ -361,80 +471,195 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   // ============================================================
-  // SEARCH BOX
+  // CATEGORIES
   // ============================================================
 
-  Widget _buildSearchBox() {
-    return Container(
-      height: 48.h,
-      decoration: BoxDecoration(
-        color: darkSurface,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: TextField(
-        style: TextStyle(color: Colors.white, fontSize: 13.sp),
-        cursorColor: Colors.white,
-        decoration: InputDecoration(
-          hintText: 'Search products, designers, collections...',
-          hintStyle: TextStyle(color: Colors.white38, fontSize: 11.sp),
-          prefixIcon: Icon(
-            Icons.search_rounded,
-            color: Colors.white54,
-            size: 21.sp,
+  // ============================================================
+  // CATEGORY SELECTOR
+  // ============================================================
+
+  Widget _buildCategories() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ======================================================
+        // MAIN CATEGORIES - HORIZONTAL
+        // ======================================================
+        SizedBox(
+          height: 44.h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: categories.length,
+            separatorBuilder: (context, index) {
+              return SizedBox(width: 8.w);
+            },
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final bool selected = selectedCategoryIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedCategoryIndex = index;
+                    selectedSubcategory = null;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  decoration: BoxDecoration(
+                    color: selected ? bronze : Colors.white,
+                    borderRadius: BorderRadius.circular(22.r),
+                    border: Border.all(
+                      color: selected ? bronze : Colors.black12,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        category.name,
+                        style: TextStyle(
+                          color:
+                              selected
+                                  ? Colors.white
+                                  : const Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 11.sp,
+                          fontWeight:
+                              selected ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                      ),
+
+                      // Small arrow if category has subcategories
+                      if (category.hasSubcategories) ...[
+                        SizedBox(width: 5.w),
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 15.sp,
+                          color: selected ? Colors.white : Colors.black45,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
-          suffixIcon: Icon(
-            Icons.mic_none_rounded,
-            color: Colors.white54,
-            size: 19.sp,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 14.h),
         ),
-      ),
+
+        // ======================================================
+        // SUBCATEGORIES
+        // ======================================================
+        if (categories[selectedCategoryIndex].hasSubcategories) ...[
+          SizedBox(height: 12.h),
+
+          _buildSubcategories(
+            categories[selectedCategoryIndex],
+            selectedCategoryIndex,
+          ),
+        ],
+      ],
     );
   }
 
   // ============================================================
-  // CATEGORIES
+  // SUBCATEGORY SELECTOR
   // ============================================================
 
-  Widget _buildCategories() {
-    return SizedBox(
-      height: 42.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final bool selected = selectedCategory == index;
+  Widget _buildSubcategories(Category category, int categoryIndex) {
+    return Container(
+      margin: EdgeInsets.only(top: 2.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: const Color(0xffF3EEE6), // subtle cream distinction
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: const Color(0xffE5D8C5)),
+      ),
+      child: SizedBox(
+        height: 36.h,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemCount: category.subcategories.length,
+          separatorBuilder: (context, index) {
+            return SizedBox(width: 7.w);
+          },
+          itemBuilder: (context, index) {
+            final subcategory = category.subcategories[index];
 
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedCategory = index;
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: EdgeInsets.only(right: 8.w),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selected ? bronze : Colors.white,
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color: selected ? bronze : Colors.black12),
-              ),
-              child: Text(
-                categories[index],
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black87,
-                  fontSize: 11.sp,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+            final bool selected = selectedSubcategory == subcategory;
+
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedCategoryIndex = categoryIndex;
+                  selectedSubcategory = subcategory;
+                });
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: EdgeInsets.symmetric(horizontal: 13.w),
+                decoration: BoxDecoration(
+                  color: selected ? bronze : Colors.white,
+                  borderRadius: BorderRadius.circular(18.r),
+                  border: Border.all(
+                    color: selected ? bronze : const Color(0xffD8CDBD),
+                  ),
+                  boxShadow:
+                      selected
+                          ? [
+                            BoxShadow(
+                              color: bronze.withOpacity(0.12),
+                              blurRadius: 5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                          : null,
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Small indicator
+                    Container(
+                      width: 5.w,
+                      height: 5.w,
+                      decoration: BoxDecoration(
+                        color:
+                            selected ? Colors.white : bronze.withOpacity(0.65),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+
+                    SizedBox(width: 6.w),
+
+                    Text(
+                      subcategory,
+                      style: TextStyle(
+                        color:
+                            selected ? Colors.white : const Color(0xff6F6253),
+                        fontSize: 10.sp,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w500,
+                      ),
+                    ),
+
+                    if (selected) ...[
+                      SizedBox(width: 5.w),
+                      Icon(
+                        Icons.check_rounded,
+                        size: 13.sp,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ],
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -451,7 +676,7 @@ class _ShopPageState extends State<ShopPage> {
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: Colors.black12),
         ),
         child: Row(
@@ -477,18 +702,54 @@ class _ShopPageState extends State<ShopPage> {
   // ============================================================
 
   Widget _buildProductGrid() {
+    final visibleProducts = filteredProducts;
+
+    if (visibleProducts.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 50.h),
+        child: Column(
+          children: [
+            Icon(
+              Icons.inventory_2_outlined,
+              size: 45.sp,
+              color: Colors.black26,
+            ),
+
+            SizedBox(height: 12.h),
+
+            Text(
+              'No products found',
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            SizedBox(height: 5.h),
+
+            Text(
+              selectedSubcategory ?? categories[selectedCategoryIndex].name,
+              style: TextStyle(color: Colors.black38, fontSize: 10.sp),
+            ),
+          ],
+        ),
+      );
+    }
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: products.length,
+      itemCount: visibleProducts.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10.w,
         mainAxisSpacing: 12.h,
-        childAspectRatio: 0.61,
+        childAspectRatio: 0.50,
       ),
       itemBuilder: (context, index) {
-        return _buildProductCard(products[index]);
+        return _buildProductCard(visibleProducts[index]);
       },
     );
   }
@@ -595,6 +856,7 @@ class _ShopPageState extends State<ShopPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // CATEGORY
                 // CATEGORY
                 Text(
                   product['category'],
@@ -794,296 +1056,373 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   // ============================================================
-  // TRUST SECTION
-  // ============================================================
-
-  Widget _buildTrustSection() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 8.w),
-      decoration: BoxDecoration(
-        color: darkColor,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Row(
-        children: [
-          _buildTrustItem(
-            Icons.local_shipping_outlined,
-            'Free Shipping',
-            'Orders over ₹500',
-          ),
-          _buildTrustItem(Icons.verified_outlined, 'Authentic', '100% genuine'),
-          _buildTrustItem(
-            Icons.lock_outline_rounded,
-            'Secure Pay',
-            'Safe checkout',
-          ),
-          _buildTrustItem(
-            Icons.support_agent_rounded,
-            'Support',
-            'Always here',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTrustItem(IconData icon, String title, String subtitle) {
-    return Expanded(
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.white, size: 20.sp),
-
-          SizedBox(height: 6.h),
-
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 9.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-
-          SizedBox(height: 2.h),
-
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white38, fontSize: 6.5.sp),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ============================================================
-  // FOOTER
-  // ============================================================
-
-  Widget _buildFooter() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: darkColor,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'FBB LUXURY',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.5,
-            ),
-          ),
-
-          SizedBox(height: 8.h),
-
-          Text(
-            'Redefining luxury fashion with carefully '
-            'curated collections from world-renowned designers.',
-            style: TextStyle(
-              color: Colors.white54,
-              fontSize: 9.sp,
-              height: 1.5,
-            ),
-          ),
-
-          SizedBox(height: 18.h),
-
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: _buildFooterColumn('SHOP', [
-                  'Men Fashion',
-                  'Women Fashion',
-                  'Accessories',
-                  'Footwear',
-                  'Watches',
-                  'Sunglasses',
-                ]),
-              ),
-
-              SizedBox(width: 20.w),
-
-              Expanded(
-                child: _buildFooterColumn('COMPANY', [
-                  'About Us',
-                  'Our Story',
-                  'Contact Us',
-                  'Privacy Policy',
-                ]),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 18.h),
-
-          Divider(color: Colors.white12, height: 1),
-
-          SizedBox(height: 12.h),
-
-          Text(
-            '© 2026 FBB Luxury. All rights reserved.',
-            style: TextStyle(color: Colors.white30, fontSize: 7.sp),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFooterColumn(String title, List<String> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 9.sp,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.5,
-          ),
-        ),
-
-        SizedBox(height: 8.h),
-
-        ...items.map(
-          (item) => Padding(
-            padding: EdgeInsets.only(bottom: 6.h),
-            child: Text(
-              item,
-              style: TextStyle(color: Colors.white, fontSize: 8.sp),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ============================================================
   // FILTER BOTTOM SHEET
   // ============================================================
 
   void _openFilter() {
+    // Local state for the bottom sheet expansion.
+    int expandedCategoryIndex = selectedCategoryIndex;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          height: 0.78.sh,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-
-              // HANDLE
-              Container(
-                width: 40.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Container(
+              height: 0.82.sh,
+              decoration: BoxDecoration(
+                color: const Color(0xffFAFAF9),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               ),
+              child: Column(
+                children: [
+                  SizedBox(height: 10.h),
 
-              // HEADER
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 14.h, 10.w, 12.h),
-                child: Row(
-                  children: [
-                    Text(
-                      'Filter Products',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  // ==================================================
+                  // HANDLE
+                  // ==================================================
+                  Container(
+                    width: 40.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
+                  ),
 
-                    const Spacer(),
-
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.close_rounded, size: 22.sp),
-                    ),
-                  ],
-                ),
-              ),
-
-              Divider(height: 1, color: Colors.black12),
-
-              // CATEGORIES
-              Expanded(
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final bool selected = selectedCategory == index;
-
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedCategory = index;
-                        });
-
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 18.w,
-                          vertical: 16.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              selected
-                                  ? bronze.withOpacity(0.08)
-                                  : Colors.white,
-                        ),
-                        child: Row(
+                  // ==================================================
+                  // HEADER
+                  // ==================================================
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(18.w, 14.h, 10.w, 12.h),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                categories[index],
-                                style: TextStyle(
-                                  color: selected ? bronze : Colors.black87,
-                                  fontSize: 13.sp,
-                                  fontWeight:
-                                      selected
-                                          ? FontWeight.w600
-                                          : FontWeight.w400,
+                            Text(
+                              'Filter Products',
+                              style: TextStyle(
+                                color: darkColor,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+
+                            SizedBox(height: 3.h),
+
+                            Text(
+                              'Choose a category or subcategory',
+                              style: TextStyle(
+                                color: Colors.black45,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const Spacer(),
+
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(sheetContext);
+                          },
+                          icon: Icon(
+                            Icons.close_rounded,
+                            size: 22.sp,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Divider(height: 1, color: const Color(0xffE8E4DE)),
+
+                  // ==================================================
+                  // CATEGORY + SUBCATEGORY LIST
+                  // ==================================================
+                  Expanded(
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(vertical: 8.h),
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final category = categories[index];
+
+                        final bool categorySelected =
+                            selectedCategoryIndex == index &&
+                            selectedSubcategory == null;
+
+                        final bool expanded = expandedCategoryIndex == index;
+
+                        return Column(
+                          children: [
+                            // ========================================
+                            // MAIN CATEGORY
+                            // ========================================
+                            InkWell(
+                              onTap: () {
+                                if (category.hasSubcategories) {
+                                  setSheetState(() {
+                                    if (expandedCategoryIndex == index) {
+                                      expandedCategoryIndex = -1;
+                                    } else {
+                                      expandedCategoryIndex = index;
+                                    }
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedCategoryIndex = index;
+                                    selectedSubcategory = null;
+                                  });
+
+                                  Navigator.pop(sheetContext);
+                                }
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 3.h,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 14.w,
+                                  vertical: 14.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      categorySelected
+                                          ? bronze.withOpacity(0.10)
+                                          : Colors.white,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(
+                                    color:
+                                        categorySelected
+                                            ? bronze.withOpacity(0.35)
+                                            : Colors.transparent,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    // Category indicator
+                                    AnimatedContainer(
+                                      duration: const Duration(
+                                        milliseconds: 180,
+                                      ),
+                                      width: 7.w,
+                                      height: 7.w,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            categorySelected
+                                                ? bronze
+                                                : Colors.black26,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 11.w),
+
+                                    // Category name
+                                    Expanded(
+                                      child: Text(
+                                        category.name,
+                                        style: TextStyle(
+                                          color:
+                                              categorySelected
+                                                  ? bronze
+                                                  : darkColor,
+                                          fontSize: 13.sp,
+                                          fontWeight:
+                                              categorySelected
+                                                  ? FontWeight.w700
+                                                  : FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+
+                                    // ==================================
+                                    // SUBCATEGORY ARROW
+                                    // ==================================
+                                    if (category.hasSubcategories)
+                                      AnimatedRotation(
+                                        duration: const Duration(
+                                          milliseconds: 180,
+                                        ),
+                                        turns: expanded ? 0.5 : 0,
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color:
+                                              expanded
+                                                  ? bronze
+                                                  : Colors.black38,
+                                          size: 21.sp,
+                                        ),
+                                      )
+                                    else
+                                      Icon(
+                                        categorySelected
+                                            ? Icons.check_rounded
+                                            : Icons.arrow_forward_ios_rounded,
+                                        color:
+                                            categorySelected
+                                                ? bronze
+                                                : Colors.black26,
+                                        size: categorySelected ? 19.sp : 11.sp,
+                                      ),
+                                  ],
                                 ),
                               ),
                             ),
 
-                            Icon(
-                              selected
-                                  ? Icons.check_rounded
-                                  : Icons.arrow_forward_ios_rounded,
-                              color: selected ? bronze : Colors.black26,
-                              size: selected ? 19.sp : 12.sp,
-                            ),
+                            // ========================================
+                            // SUBCATEGORIES
+                            // ========================================
+                            if (category.hasSubcategories && expanded)
+                              Container(
+                                margin: EdgeInsets.fromLTRB(24.w, 0, 12.w, 6.h),
+                                padding: EdgeInsets.fromLTRB(
+                                  10.w,
+                                  6.h,
+                                  8.w,
+                                  8.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffF3EEE6),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(
+                                    color: const Color(0xffE5D8C5),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    // Small label
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 8.w,
+                                          top: 3.h,
+                                          bottom: 5.h,
+                                        ),
+                                        child: Text(
+                                          'SUBCATEGORIES',
+                                          style: TextStyle(
+                                            color: bronze,
+                                            fontSize: 8.sp,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.7,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    ...category.subcategories.map((
+                                      subcategory,
+                                    ) {
+                                      final bool subSelected =
+                                          selectedCategoryIndex == index &&
+                                          selectedSubcategory == subcategory;
+
+                                      return InkWell(
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCategoryIndex = index;
+                                            selectedSubcategory = subcategory;
+                                          });
+
+                                          Navigator.pop(sheetContext);
+                                        },
+                                        child: AnimatedContainer(
+                                          duration: const Duration(
+                                            milliseconds: 160,
+                                          ),
+                                          width: double.infinity,
+                                          margin: EdgeInsets.symmetric(
+                                            vertical: 2.h,
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 10.w,
+                                            vertical: 10.h,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                subSelected
+                                                    ? bronze.withOpacity(0.14)
+                                                    : Colors.transparent,
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              // Subcategory dot
+                                              AnimatedContainer(
+                                                duration: const Duration(
+                                                  milliseconds: 160,
+                                                ),
+                                                width: 6.w,
+                                                height: 6.w,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      subSelected
+                                                          ? bronze
+                                                          : const Color(
+                                                            0xffC8BBA8,
+                                                          ),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+
+                                              SizedBox(width: 10.w),
+
+                                              Expanded(
+                                                child: Text(
+                                                  subcategory,
+                                                  style: TextStyle(
+                                                    color:
+                                                        subSelected
+                                                            ? bronze
+                                                            : const Color(
+                                                              0xff62584D,
+                                                            ),
+                                                    fontSize: 11.sp,
+                                                    fontWeight:
+                                                        subSelected
+                                                            ? FontWeight.w600
+                                                            : FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              if (subSelected)
+                                                Icon(
+                                                  Icons.check_rounded,
+                                                  color: bronze,
+                                                  size: 17.sp,
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
                           ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

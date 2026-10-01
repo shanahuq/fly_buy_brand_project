@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'shop_page.dart';
@@ -5,21 +6,44 @@ import 'cart_page.dart';
 import 'profile_page.dart';
 
 class BottomNavigationbar extends StatefulWidget {
-  const BottomNavigationbar({super.key});
+  final int initialIndex;
+
+  const BottomNavigationbar({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<BottomNavigationbar> createState() => _BottomNavigationbarState();
 }
 
 class _BottomNavigationbarState extends State<BottomNavigationbar> {
-  int selectedIndex = 0;
+  late int selectedIndex;
 
-  final List<Widget> pages = [
-    const HomePage(),
-    const ShopPage(),
-    const CartPage(),
-    const ProfilePage(),
-  ];
+  late final List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedIndex = widget.initialIndex;
+
+    pages = [
+      HomePage(
+        onShopTap: () {
+          setState(() {
+            selectedIndex = 1;
+          });
+        },
+      ),
+
+      const ShopPage(),
+
+      const CartPage(),
+
+      const ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +53,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(40, 8, 40, 12),
+
           child: Container(
             height: 62,
 
@@ -53,6 +78,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
               children: [
                 _buildNavItem(
                   icon: Icons.home_outlined,
@@ -108,20 +134,26 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
+
         curve: Curves.easeOut,
 
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 6,
+        ),
 
         decoration: BoxDecoration(
-          color:
-              isSelected ? Colors.white.withOpacity(0.10) : Colors.transparent,
+          color: isSelected
+              ? Colors.white.withOpacity(0.10)
+              : Colors.transparent,
 
           borderRadius: BorderRadius.circular(14),
 
-          border:
-              isSelected
-                  ? Border.all(color: Colors.white.withOpacity(0.08))
-                  : null,
+          border: isSelected
+              ? Border.all(
+                  color: Colors.white.withOpacity(0.08),
+                )
+              : null,
         ),
 
         child: Column(
@@ -133,9 +165,13 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
 
               child: Icon(
                 isSelected ? activeIcon : icon,
+
                 key: ValueKey(isSelected),
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.45),
+
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.45),
+
                 size: 21,
               ),
             ),
@@ -146,12 +182,15 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
               duration: const Duration(milliseconds: 200),
 
               style: TextStyle(
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.45),
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.45),
 
                 fontSize: 9,
 
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                fontWeight: isSelected
+                    ? FontWeight.w700
+                    : FontWeight.w500,
               ),
 
               child: Text(label),
@@ -162,3 +201,4 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
     );
   }
 }
+

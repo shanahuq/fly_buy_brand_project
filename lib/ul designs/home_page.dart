@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fly_buy_brand_project/ul%20designs/shop_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final VoidCallback onShopTap;
+
+  const HomePage({super.key, required this.onShopTap});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -173,7 +176,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               print('Menu');
             },
-            icon: Icon(Icons.search, color: Colors.white, size: 24.sp),
+            icon: Icon(Icons.menu_rounded, color: Colors.white, size: 24.sp),
           ),
           IconButton(
             onPressed: () {
@@ -248,25 +251,26 @@ class _HomePageState extends State<HomePage> {
       height: 48.h,
 
       decoration: BoxDecoration(
-        color: const Color(0xff171B22),
+        color: const Color(0xffEFE8DC), // luxury cream background
         borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: Colors.black26, width: 1),
       ),
 
       child: TextField(
         controller: searchController,
 
-        style: TextStyle(color: Colors.white, fontSize: 14.sp),
+        style: TextStyle(color: Colors.black, fontSize: 14.sp),
 
-        cursorColor: Colors.white,
+        cursorColor: Colors.black,
 
         decoration: InputDecoration(
           hintText: 'Search products',
 
-          hintStyle: TextStyle(color: Colors.white38, fontSize: 13.sp),
+          hintStyle: TextStyle(color: Colors.black45, fontSize: 13.sp),
 
           prefixIcon: Icon(
             Icons.search_rounded,
-            color: Colors.white54,
+            color: Colors.black,
             size: 21.sp,
           ),
 
@@ -279,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: Icon(
                       Icons.close_rounded,
-                      color: Colors.white54,
+                      color: Colors.black,
                       size: 19.sp,
                     ),
                   )
@@ -374,9 +378,7 @@ class _HomePageState extends State<HomePage> {
                     height: 32.h,
 
                     child: ElevatedButton(
-                      onPressed: () {
-                        print('Shop now');
-                      },
+                      onPressed: widget.onShopTap,
 
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
