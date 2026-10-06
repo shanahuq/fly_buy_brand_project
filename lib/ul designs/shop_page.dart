@@ -133,8 +133,8 @@ class _ShopPageState extends State<ShopPage> {
     },
     {
       'image': 'assets/timepieces_image.jpg',
-      'category': 'MEN',
-      'subcategory': 'Watches',
+      'category': 'Home-Kitchen',
+      'subcategory': 'Home Appliance',
 
       'name': 'AURORA AUTOMATIC',
       'description': 'Rose Gold - Turquoise Edition',
