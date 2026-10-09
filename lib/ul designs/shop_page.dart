@@ -5,7 +5,10 @@ class Category {
   final String name;
   final List<String> subcategories;
 
-  const Category({required this.name, this.subcategories = const []});
+  const Category({
+    required this.name,
+    this.subcategories = const [],
+  });
 
   bool get hasSubcategories => subcategories.isNotEmpty;
 }
@@ -36,52 +39,15 @@ class _ShopPageState extends State<ShopPage> {
   String? selectedSubcategory;
 
   final List<Category> categories = [
-    // ==========================================================
-    // ALL PRODUCTS
-    // ==========================================================
     Category(name: 'All Products'),
-
-    // ==========================================================
-    // E-CIGS
-    // ==========================================================
     Category(name: 'E-Cigs', subcategories: ['Vape']),
-
-    // ==========================================================
-    // GADGETS
-    // ==========================================================
-    Category(
-      name: 'Gadgets',
-      subcategories: [
-        // Add gadget subcategories here later
-      ],
-    ),
-
-    // ==========================================================
-    // GAMES & GIFTS
-    // ==========================================================
-    Category(
-      name: 'Games & Gifts',
-      subcategories: [
-        // Add game/gift subcategories here later
-      ],
-    ),
-
-    // ==========================================================
-    // HOME-KITCHEN
-    // ==========================================================
+    Category(name: 'Gadgets'),
+    Category(name: 'Games & Gifts'),
     Category(
       name: 'Home-Kitchen',
       subcategories: ['Bedsheets', 'Home Appliance'],
     ),
-
-    // ==========================================================
-    // KIDS
-    // ==========================================================
     Category(name: 'KIDS', subcategories: ['Footware']),
-
-    // ==========================================================
-    // MEN
-    // ==========================================================
     Category(
       name: 'MEN',
       subcategories: [
@@ -97,10 +63,6 @@ class _ShopPageState extends State<ShopPage> {
         'Watches',
       ],
     ),
-
-    // ==========================================================
-    // WOMEN
-    // ==========================================================
     Category(
       name: 'WOMEN',
       subcategories: [
@@ -135,7 +97,6 @@ class _ShopPageState extends State<ShopPage> {
       'image': 'assets/timepieces_image.jpg',
       'category': 'Home-Kitchen',
       'subcategory': 'Home Appliance',
-
       'name': 'AURORA AUTOMATIC',
       'description': 'Rose Gold - Turquoise Edition',
       'price': 18450,
@@ -147,7 +108,6 @@ class _ShopPageState extends State<ShopPage> {
       'image': 'assets/cartier_sunglass.jpg',
       'category': 'MEN',
       'subcategory': 'Sunglass & Frames',
-
       'name': 'CARTIER VENDÔME GOLD',
       'description': 'Tortoiseshell & 24K Accent',
       'price': 4999,
@@ -159,7 +119,6 @@ class _ShopPageState extends State<ShopPage> {
       'image': 'assets/prada_sunglass.jpg',
       'category': 'MEN',
       'subcategory': 'Sunglass & Frames',
-
       'name': 'PRADA RUNWAY SQUARE',
       'description': 'Gloss Acetate Black',
       'price': 3999,
@@ -171,7 +130,6 @@ class _ShopPageState extends State<ShopPage> {
       'image': 'assets/sunglasses_image.jpg',
       'category': 'MEN',
       'subcategory': 'Sunglass & Frames',
-
       'name': 'FBB SIGNATURE BLACK',
       'description': 'Premium Black Acetate',
       'price': 4499,
@@ -183,7 +141,6 @@ class _ShopPageState extends State<ShopPage> {
       'image': 'assets/gucci_sunglass.jpg',
       'category': 'MEN',
       'subcategory': 'Sunglass & Frames',
-
       'name': 'GUCCI AVIATOR',
       'description': 'Classic Luxury Edition',
       'price': 5299,
@@ -193,15 +150,18 @@ class _ShopPageState extends State<ShopPage> {
     },
   ];
 
+  // ==========================================================
+  // FILTERED PRODUCTS
+  // ==========================================================
+
   List<Map<String, dynamic>> get filteredProducts {
-    // ALL PRODUCTS
     if (selectedCategoryIndex == 0) {
       return products;
     }
 
-    final String selectedCategory = categories[selectedCategoryIndex].name;
+    final String selectedCategory =
+        categories[selectedCategoryIndex].name;
 
-    // CATEGORY + SUBCATEGORY
     if (selectedSubcategory != null) {
       return products.where((product) {
         return product['category'] == selectedCategory &&
@@ -209,7 +169,6 @@ class _ShopPageState extends State<ShopPage> {
       }).toList();
     }
 
-    // CATEGORY ONLY
     return products.where((product) {
       return product['category'] == selectedCategory;
     }).toList();
@@ -223,17 +182,11 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pageBackground,
-
-      // ========================================================
-      // APP BAR
-      // ========================================================
       appBar: AppBar(
         backgroundColor: darkColor,
         elevation: 0,
         scrolledUnderElevation: 0,
-
         leadingWidth: 100.w,
-
         leading: Padding(
           padding: EdgeInsets.only(left: 16.w),
           child: Column(
@@ -260,15 +213,17 @@ class _ShopPageState extends State<ShopPage> {
             ],
           ),
         ),
-
         actions: [
           IconButton(
             onPressed: () {
               debugPrint('Search');
             },
-            icon: Icon(Icons.search_rounded, color: Colors.white, size: 24.sp),
+            icon: Icon(
+              Icons.search_rounded,
+              color: Colors.white,
+              size: 24.sp,
+            ),
           ),
-
           IconButton(
             onPressed: () {
               debugPrint('Shopping bag');
@@ -279,30 +234,25 @@ class _ShopPageState extends State<ShopPage> {
               size: 23.sp,
             ),
           ),
-
           SizedBox(width: 6.w),
         ],
       ),
-
-      // ========================================================
-      // BODY
-      // ========================================================
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 30.h),
+            padding: EdgeInsets.fromLTRB(
+              16.w,
+              14.h,
+              16.w,
+              30.h,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ==================================================
-                // PAGE TITLE
-                // ==================================================
-
-                // ==================================================
                 // PREMIUM SHOP HEADER
-                // ==================================================
+
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
@@ -310,9 +260,11 @@ class _ShopPageState extends State<ShopPage> {
                     vertical: 18.h,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xffEFE8DC), // luxury cream background
+                    color: const Color(0xffEFE8DC),
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: const Color(0xffE2D8C8)),
+                    border: Border.all(
+                      color: const Color(0xffE2D8C8),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +283,6 @@ class _ShopPageState extends State<ShopPage> {
                               ),
                             ),
                           ),
-
                           Text(
                             '${products.length} Products',
                             style: TextStyle(
@@ -342,9 +293,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                         ],
                       ),
-
                       SizedBox(height: 6.h),
-
                       Text(
                         'Discover our curated collection of premium products',
                         style: TextStyle(
@@ -359,12 +308,8 @@ class _ShopPageState extends State<ShopPage> {
 
                 SizedBox(height: 24.h),
 
-                // ==================================================
                 // CATEGORY HEADER
-                // ==================================================
-                // ==================================================
-                // CATEGORY HEADER
-                // ==================================================
+
                 Row(
                   children: [
                     Text(
@@ -375,40 +320,32 @@ class _ShopPageState extends State<ShopPage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
                     const Spacer(),
-
                     _buildFilterButton(),
                   ],
                 ),
 
                 SizedBox(height: 14.h),
 
-                // ==================================================
-                // HORIZONTAL CATEGORIES
-                // ==================================================
                 _buildCategories(),
 
                 SizedBox(height: 26.h),
 
-                // ==================================================
                 // PRODUCT HEADER
-                // ==================================================
+
                 Row(
                   children: [
-                    Text(
-                      selectedSubcategory != null
-                          ? selectedSubcategory!
-                          : categories[selectedCategoryIndex].name,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Text(
+                        selectedSubcategory ??
+                            categories[selectedCategoryIndex].name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-
-                    const Spacer(),
-
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -440,28 +377,17 @@ class _ShopPageState extends State<ShopPage> {
 
                 SizedBox(height: 12.h),
 
-                // ==================================================
                 // PRODUCT GRID
-                // ==================================================
+
                 _buildProductGrid(),
 
                 SizedBox(height: 25.h),
 
-                // ==================================================
                 // LOAD MORE
-                // ==================================================
+
                 _buildLoadMore(),
 
                 SizedBox(height: 30.h),
-
-                // ==================================================
-                // TRUST FEATURES
-                // ==================================================
-                SizedBox(height: 25.h),
-
-                // ==================================================
-                // FOOTER
-                // ==================================================
               ],
             ),
           ),
@@ -470,21 +396,14 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // CATEGORIES
-  // ============================================================
-
-  // ============================================================
-  // CATEGORY SELECTOR
-  // ============================================================
+  // ==========================================================
 
   Widget _buildCategories() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ======================================================
-        // MAIN CATEGORIES - HORIZONTAL
-        // ======================================================
         SizedBox(
           height: 44.h,
           child: ListView.separated(
@@ -496,7 +415,8 @@ class _ShopPageState extends State<ShopPage> {
             },
             itemBuilder: (context, index) {
               final category = categories[index];
-              final bool selected = selectedCategoryIndex == index;
+              final bool selected =
+                  selectedCategoryIndex == index;
 
               return GestureDetector(
                 onTap: () {
@@ -522,23 +442,23 @@ class _ShopPageState extends State<ShopPage> {
                       Text(
                         category.name,
                         style: TextStyle(
-                          color:
-                              selected
-                                  ? Colors.white
-                                  : const Color.fromARGB(255, 0, 0, 0),
+                          color: selected
+                              ? Colors.white
+                              : Colors.black,
                           fontSize: 11.sp,
-                          fontWeight:
-                              selected ? FontWeight.w600 : FontWeight.w400,
+                          fontWeight: selected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
                         ),
                       ),
-
-                      // Small arrow if category has subcategories
                       if (category.hasSubcategories) ...[
                         SizedBox(width: 5.w),
                         Icon(
                           Icons.keyboard_arrow_down_rounded,
                           size: 15.sp,
-                          color: selected ? Colors.white : Colors.black45,
+                          color: selected
+                              ? Colors.white
+                              : Colors.black45,
                         ),
                       ],
                     ],
@@ -549,12 +469,11 @@ class _ShopPageState extends State<ShopPage> {
           ),
         ),
 
-        // ======================================================
         // SUBCATEGORIES
-        // ======================================================
-        if (categories[selectedCategoryIndex].hasSubcategories) ...[
-          SizedBox(height: 12.h),
 
+        if (categories[selectedCategoryIndex]
+            .hasSubcategories) ...[
+          SizedBox(height: 12.h),
           _buildSubcategories(
             categories[selectedCategoryIndex],
             selectedCategoryIndex,
@@ -564,18 +483,26 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // SUBCATEGORY SELECTOR
-  // ============================================================
+  // ==========================================================
 
-  Widget _buildSubcategories(Category category, int categoryIndex) {
+  Widget _buildSubcategories(
+    Category category,
+    int categoryIndex,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 2.h),
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: 8.w,
+        vertical: 8.h,
+      ),
       decoration: BoxDecoration(
-        color: const Color(0xffF3EEE6), // subtle cream distinction
+        color: const Color(0xffF3EEE6),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: const Color(0xffE5D8C5)),
+        border: Border.all(
+          color: const Color(0xffE5D8C5),
+        ),
       ),
       child: SizedBox(
         height: 36.h,
@@ -588,8 +515,8 @@ class _ShopPageState extends State<ShopPage> {
           },
           itemBuilder: (context, index) {
             final subcategory = category.subcategories[index];
-
-            final bool selected = selectedSubcategory == subcategory;
+            final bool selected =
+                selectedSubcategory == subcategory;
 
             return GestureDetector(
               onTap: () {
@@ -605,47 +532,47 @@ class _ShopPageState extends State<ShopPage> {
                   color: selected ? bronze : Colors.white,
                   borderRadius: BorderRadius.circular(18.r),
                   border: Border.all(
-                    color: selected ? bronze : const Color(0xffD8CDBD),
+                    color: selected
+                        ? bronze
+                        : const Color(0xffD8CDBD),
                   ),
-                  boxShadow:
-                      selected
-                          ? [
-                            BoxShadow(
-                              color: bronze.withOpacity(0.12),
-                              blurRadius: 5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                          : null,
+                  boxShadow: selected
+                      ? [
+                          BoxShadow(
+                            color: bronze.withOpacity(0.12),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
                 ),
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Small indicator
                     Container(
                       width: 5.w,
                       height: 5.w,
                       decoration: BoxDecoration(
-                        color:
-                            selected ? Colors.white : bronze.withOpacity(0.65),
+                        color: selected
+                            ? Colors.white
+                            : bronze.withOpacity(0.65),
                         shape: BoxShape.circle,
                       ),
                     ),
-
                     SizedBox(width: 6.w),
-
                     Text(
                       subcategory,
                       style: TextStyle(
-                        color:
-                            selected ? Colors.white : const Color(0xff6F6253),
+                        color: selected
+                            ? Colors.white
+                            : const Color(0xff6F6253),
                         fontSize: 10.sp,
-                        fontWeight:
-                            selected ? FontWeight.w600 : FontWeight.w500,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
-
                     if (selected) ...[
                       SizedBox(width: 5.w),
                       Icon(
@@ -664,9 +591,9 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // FILTER BUTTON
-  // ============================================================
+  // ==========================================================
 
   Widget _buildFilterButton() {
     return GestureDetector(
@@ -681,7 +608,11 @@ class _ShopPageState extends State<ShopPage> {
         ),
         child: Row(
           children: [
-            Icon(Icons.tune_rounded, size: 15.sp, color: Colors.black87),
+            Icon(
+              Icons.tune_rounded,
+              size: 15.sp,
+              color: Colors.black87,
+            ),
             SizedBox(width: 5.w),
             Text(
               'Filter',
@@ -697,9 +628,9 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // PRODUCT GRID
-  // ============================================================
+  // ==========================================================
 
   Widget _buildProductGrid() {
     final visibleProducts = filteredProducts;
@@ -715,9 +646,7 @@ class _ShopPageState extends State<ShopPage> {
               size: 45.sp,
               color: Colors.black26,
             ),
-
             SizedBox(height: 12.h),
-
             Text(
               'No products found',
               style: TextStyle(
@@ -726,12 +655,14 @@ class _ShopPageState extends State<ShopPage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-
             SizedBox(height: 5.h),
-
             Text(
-              selectedSubcategory ?? categories[selectedCategoryIndex].name,
-              style: TextStyle(color: Colors.black38, fontSize: 10.sp),
+              selectedSubcategory ??
+                  categories[selectedCategoryIndex].name,
+              style: TextStyle(
+                color: Colors.black38,
+                fontSize: 10.sp,
+              ),
             ),
           ],
         ),
@@ -754,15 +685,16 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // PRODUCT CARD
-  // ============================================================
+  // ==========================================================
 
   Widget _buildProductCard(Map<String, dynamic> product) {
     final int price = product['price'];
     final int oldPrice = product['oldPrice'];
 
-    final int discount = ((oldPrice - price) / oldPrice * 100).round();
+    final int discount =
+        ((oldPrice - price) / oldPrice * 100).round();
 
     return Container(
       decoration: BoxDecoration(
@@ -773,9 +705,8 @@ class _ShopPageState extends State<ShopPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ==================================================
-          // IMAGE
-          // ==================================================
+          // PRODUCT IMAGE
+
           AspectRatio(
             aspectRatio: 1.0,
             child: Stack(
@@ -798,6 +729,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
 
                 // DISCOUNT
+
                 Positioned(
                   top: 8.h,
                   left: 8.w,
@@ -822,12 +754,15 @@ class _ShopPageState extends State<ShopPage> {
                 ),
 
                 // WISHLIST
+
                 Positioned(
                   top: 7.h,
                   right: 7.w,
                   child: GestureDetector(
                     onTap: () {
-                      debugPrint('${product['name']} favorite');
+                      debugPrint(
+                        '${product['name']} favorite',
+                      );
                     },
                     child: Container(
                       width: 31.w,
@@ -848,16 +783,18 @@ class _ShopPageState extends State<ShopPage> {
             ),
           ),
 
-          // ==================================================
-          // DETAILS
-          // ==================================================
+          // PRODUCT DETAILS
+
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 9.h, 10.w, 10.h),
+            padding: EdgeInsets.fromLTRB(
+              10.w,
+              9.h,
+              10.w,
+              10.h,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CATEGORY
-                // CATEGORY
                 Text(
                   product['category'],
                   maxLines: 1,
@@ -869,10 +806,7 @@ class _ShopPageState extends State<ShopPage> {
                     letterSpacing: 0.4,
                   ),
                 ),
-
                 SizedBox(height: 4.h),
-
-                // NAME
                 Text(
                   product['name'],
                   maxLines: 1,
@@ -883,20 +817,20 @@ class _ShopPageState extends State<ShopPage> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 SizedBox(height: 3.h),
-
-                // DESCRIPTION
                 Text(
                   product['description'],
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.black45, fontSize: 9.sp),
+                  style: TextStyle(
+                    color: Colors.black45,
+                    fontSize: 9.sp,
+                  ),
                 ),
-
                 SizedBox(height: 6.h),
 
                 // RATING
+
                 Row(
                   children: [
                     ...List.generate(5, (index) {
@@ -906,36 +840,44 @@ class _ShopPageState extends State<ShopPage> {
                         size: 11.sp,
                       );
                     }),
-
                     SizedBox(width: 4.w),
-
-                    Text(
-                      '${product['rating']} (${product['reviews']})',
-                      style: TextStyle(color: Colors.black45, fontSize: 8.sp),
+                    Expanded(
+                      child: Text(
+                        '${product['rating']} (${product['reviews']})',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black45,
+                          fontSize: 8.sp,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-
                 SizedBox(height: 7.h),
 
                 // PRICE
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      '₹${_formatPrice(price)}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w700,
+                    Flexible(
+                      child: Text(
+                        '₹${_formatPrice(price)}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-
                     SizedBox(width: 5.w),
-
                     Flexible(
                       child: Text(
                         '₹${_formatPrice(oldPrice)}',
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.black26,
@@ -946,10 +888,10 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 8.h),
 
                 // STOCK
+
                 Row(
                   children: [
                     Container(
@@ -963,20 +905,25 @@ class _ShopPageState extends State<ShopPage> {
                     SizedBox(width: 4.w),
                     Text(
                       'In Stock',
-                      style: TextStyle(color: Colors.green, fontSize: 8.sp),
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 8.sp,
+                      ),
                     ),
                   ],
                 ),
-
                 SizedBox(height: 9.h),
 
                 // ADD TO CART
+
                 SizedBox(
                   width: double.infinity,
                   height: 36.h,
                   child: ElevatedButton(
                     onPressed: () {
-                      debugPrint('${product['name']} added to cart');
+                      debugPrint(
+                        '${product['name']} added to cart',
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: bronze,
@@ -990,7 +937,10 @@ class _ShopPageState extends State<ShopPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.shopping_bag_outlined, size: 15.sp),
+                        Icon(
+                          Icons.shopping_bag_outlined,
+                          size: 15.sp,
+                        ),
                         SizedBox(width: 5.w),
                         Text(
                           'Add to Cart',
@@ -1011,9 +961,9 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // PRICE FORMAT
-  // ============================================================
+  // ==========================================================
 
   String _formatPrice(int price) {
     return price.toString().replaceAllMapped(
@@ -1022,9 +972,9 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // LOAD MORE
-  // ============================================================
+  // ==========================================================
 
   Widget _buildLoadMore() {
     return Center(
@@ -1055,12 +1005,11 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  // ============================================================
+  // ==========================================================
   // FILTER BOTTOM SHEET
-  // ============================================================
+  // ==========================================================
 
   void _openFilter() {
-    // Local state for the bottom sheet expansion.
     int expandedCategoryIndex = selectedCategoryIndex;
 
     showModalBottomSheet(
@@ -1074,15 +1023,16 @@ class _ShopPageState extends State<ShopPage> {
               height: 0.82.sh,
               decoration: BoxDecoration(
                 color: const Color(0xffFAFAF9),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20.r),
+                ),
               ),
               child: Column(
                 children: [
                   SizedBox(height: 10.h),
 
-                  // ==================================================
                   // HANDLE
-                  // ==================================================
+
                   Container(
                     width: 40.w,
                     height: 4.h,
@@ -1092,11 +1042,15 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                   ),
 
-                  // ==================================================
                   // HEADER
-                  // ==================================================
+
                   Padding(
-                    padding: EdgeInsets.fromLTRB(18.w, 14.h, 10.w, 12.h),
+                    padding: EdgeInsets.fromLTRB(
+                      18.w,
+                      14.h,
+                      10.w,
+                      12.h,
+                    ),
                     child: Row(
                       children: [
                         Column(
@@ -1110,9 +1064,7 @@ class _ShopPageState extends State<ShopPage> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-
                             SizedBox(height: 3.h),
-
                             Text(
                               'Choose a category or subcategory',
                               style: TextStyle(
@@ -1122,9 +1074,7 @@ class _ShopPageState extends State<ShopPage> {
                             ),
                           ],
                         ),
-
                         const Spacer(),
-
                         IconButton(
                           onPressed: () {
                             Navigator.pop(sheetContext);
@@ -1139,11 +1089,13 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                   ),
 
-                  Divider(height: 1, color: const Color(0xffE8E4DE)),
+                  const Divider(
+                    height: 1,
+                    color: Color(0xffE8E4DE),
+                  ),
 
-                  // ==================================================
-                  // CATEGORY + SUBCATEGORY LIST
-                  // ==================================================
+                  // CATEGORY AND SUBCATEGORY LIST
+
                   Expanded(
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
@@ -1154,24 +1106,23 @@ class _ShopPageState extends State<ShopPage> {
 
                         final bool categorySelected =
                             selectedCategoryIndex == index &&
-                            selectedSubcategory == null;
+                                selectedSubcategory == null;
 
-                        final bool expanded = expandedCategoryIndex == index;
+                        final bool expanded =
+                            expandedCategoryIndex == index;
 
                         return Column(
                           children: [
-                            // ========================================
                             // MAIN CATEGORY
-                            // ========================================
+
                             InkWell(
                               onTap: () {
                                 if (category.hasSubcategories) {
                                   setSheetState(() {
-                                    if (expandedCategoryIndex == index) {
-                                      expandedCategoryIndex = -1;
-                                    } else {
-                                      expandedCategoryIndex = index;
-                                    }
+                                    expandedCategoryIndex =
+                                        expandedCategoryIndex == index
+                                            ? -1
+                                            : index;
                                   });
                                 } else {
                                   setState(() {
@@ -1183,7 +1134,9 @@ class _ShopPageState extends State<ShopPage> {
                                 }
                               },
                               child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 180),
+                                duration: const Duration(
+                                  milliseconds: 180,
+                                ),
                                 margin: EdgeInsets.symmetric(
                                   horizontal: 12.w,
                                   vertical: 3.h,
@@ -1193,21 +1146,18 @@ class _ShopPageState extends State<ShopPage> {
                                   vertical: 14.h,
                                 ),
                                 decoration: BoxDecoration(
-                                  color:
-                                      categorySelected
-                                          ? bronze.withOpacity(0.10)
-                                          : Colors.white,
+                                  color: categorySelected
+                                      ? bronze.withOpacity(0.10)
+                                      : Colors.white,
                                   borderRadius: BorderRadius.circular(10.r),
                                   border: Border.all(
-                                    color:
-                                        categorySelected
-                                            ? bronze.withOpacity(0.35)
-                                            : Colors.transparent,
+                                    color: categorySelected
+                                        ? bronze.withOpacity(0.35)
+                                        : Colors.transparent,
                                   ),
                                 ),
                                 child: Row(
                                   children: [
-                                    // Category indicator
                                     AnimatedContainer(
                                       duration: const Duration(
                                         milliseconds: 180,
@@ -1215,37 +1165,27 @@ class _ShopPageState extends State<ShopPage> {
                                       width: 7.w,
                                       height: 7.w,
                                       decoration: BoxDecoration(
-                                        color:
-                                            categorySelected
-                                                ? bronze
-                                                : Colors.black26,
+                                        color: categorySelected
+                                            ? bronze
+                                            : Colors.black26,
                                         shape: BoxShape.circle,
                                       ),
                                     ),
-
                                     SizedBox(width: 11.w),
-
-                                    // Category name
                                     Expanded(
                                       child: Text(
                                         category.name,
                                         style: TextStyle(
-                                          color:
-                                              categorySelected
-                                                  ? bronze
-                                                  : darkColor,
+                                          color: categorySelected
+                                              ? bronze
+                                              : darkColor,
                                           fontSize: 13.sp,
-                                          fontWeight:
-                                              categorySelected
-                                                  ? FontWeight.w700
-                                                  : FontWeight.w500,
+                                          fontWeight: categorySelected
+                                              ? FontWeight.w700
+                                              : FontWeight.w500,
                                         ),
                                       ),
                                     ),
-
-                                    // ==================================
-                                    // SUBCATEGORY ARROW
-                                    // ==================================
                                     if (category.hasSubcategories)
                                       AnimatedRotation(
                                         duration: const Duration(
@@ -1254,10 +1194,9 @@ class _ShopPageState extends State<ShopPage> {
                                         turns: expanded ? 0.5 : 0,
                                         child: Icon(
                                           Icons.keyboard_arrow_down_rounded,
-                                          color:
-                                              expanded
-                                                  ? bronze
-                                                  : Colors.black38,
+                                          color: expanded
+                                              ? bronze
+                                              : Colors.black38,
                                           size: 21.sp,
                                         ),
                                       )
@@ -1266,23 +1205,28 @@ class _ShopPageState extends State<ShopPage> {
                                         categorySelected
                                             ? Icons.check_rounded
                                             : Icons.arrow_forward_ios_rounded,
-                                        color:
-                                            categorySelected
-                                                ? bronze
-                                                : Colors.black26,
-                                        size: categorySelected ? 19.sp : 11.sp,
+                                        color: categorySelected
+                                            ? bronze
+                                            : Colors.black26,
+                                        size: categorySelected
+                                            ? 19.sp
+                                            : 11.sp,
                                       ),
                                   ],
                                 ),
                               ),
                             ),
 
-                            // ========================================
                             // SUBCATEGORIES
-                            // ========================================
+
                             if (category.hasSubcategories && expanded)
                               Container(
-                                margin: EdgeInsets.fromLTRB(24.w, 0, 12.w, 6.h),
+                                margin: EdgeInsets.fromLTRB(
+                                  24.w,
+                                  0,
+                                  12.w,
+                                  6.h,
+                                ),
                                 padding: EdgeInsets.fromLTRB(
                                   10.w,
                                   6.h,
@@ -1298,7 +1242,6 @@ class _ShopPageState extends State<ShopPage> {
                                 ),
                                 child: Column(
                                   children: [
-                                    // Small label
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Padding(
@@ -1318,99 +1261,90 @@ class _ShopPageState extends State<ShopPage> {
                                         ),
                                       ),
                                     ),
+                                    ...category.subcategories.map(
+                                      (subcategory) {
+                                        final bool subSelected =
+                                            selectedCategoryIndex == index &&
+                                                selectedSubcategory ==
+                                                    subcategory;
 
-                                    ...category.subcategories.map((
-                                      subcategory,
-                                    ) {
-                                      final bool subSelected =
-                                          selectedCategoryIndex == index &&
-                                          selectedSubcategory == subcategory;
+                                        return InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                          onTap: () {
+                                            setState(() {
+                                              selectedCategoryIndex = index;
+                                              selectedSubcategory =
+                                                  subcategory;
+                                            });
 
-                                      return InkWell(
-                                        borderRadius: BorderRadius.circular(
-                                          8.r,
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCategoryIndex = index;
-                                            selectedSubcategory = subcategory;
-                                          });
-
-                                          Navigator.pop(sheetContext);
-                                        },
-                                        child: AnimatedContainer(
-                                          duration: const Duration(
-                                            milliseconds: 160,
-                                          ),
-                                          width: double.infinity,
-                                          margin: EdgeInsets.symmetric(
-                                            vertical: 2.h,
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 10.w,
-                                            vertical: 10.h,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                subSelected
-                                                    ? bronze.withOpacity(0.14)
-                                                    : Colors.transparent,
-                                            borderRadius: BorderRadius.circular(
-                                              8.r,
+                                            Navigator.pop(sheetContext);
+                                          },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(
+                                              milliseconds: 160,
                                             ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              // Subcategory dot
-                                              AnimatedContainer(
-                                                duration: const Duration(
-                                                  milliseconds: 160,
-                                                ),
-                                                width: 6.w,
-                                                height: 6.w,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      subSelected
-                                                          ? bronze
-                                                          : const Color(
+                                            width: double.infinity,
+                                            margin: EdgeInsets.symmetric(
+                                              vertical: 2.h,
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10.w,
+                                              vertical: 10.h,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: subSelected
+                                                  ? bronze.withOpacity(0.14)
+                                                  : Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                AnimatedContainer(
+                                                  duration: const Duration(
+                                                    milliseconds: 160,
+                                                  ),
+                                                  width: 6.w,
+                                                  height: 6.w,
+                                                  decoration: BoxDecoration(
+                                                    color: subSelected
+                                                        ? bronze
+                                                        : const Color(
                                                             0xffC8BBA8,
                                                           ),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                              ),
-
-                                              SizedBox(width: 10.w),
-
-                                              Expanded(
-                                                child: Text(
-                                                  subcategory,
-                                                  style: TextStyle(
-                                                    color:
-                                                        subSelected
-                                                            ? bronze
-                                                            : const Color(
-                                                              0xff62584D,
-                                                            ),
-                                                    fontSize: 11.sp,
-                                                    fontWeight:
-                                                        subSelected
-                                                            ? FontWeight.w600
-                                                            : FontWeight.w400,
+                                                    shape: BoxShape.circle,
                                                   ),
                                                 ),
-                                              ),
-
-                                              if (subSelected)
-                                                Icon(
-                                                  Icons.check_rounded,
-                                                  color: bronze,
-                                                  size: 17.sp,
+                                                SizedBox(width: 10.w),
+                                                Expanded(
+                                                  child: Text(
+                                                    subcategory,
+                                                    style: TextStyle(
+                                                      color: subSelected
+                                                          ? bronze
+                                                          : const Color(
+                                                              0xff62584D,
+                                                            ),
+                                                      fontSize: 11.sp,
+                                                      fontWeight: subSelected
+                                                          ? FontWeight.w600
+                                                          : FontWeight.w400,
+                                                    ),
+                                                  ),
                                                 ),
-                                            ],
+                                                if (subSelected)
+                                                  Icon(
+                                                    Icons.check_rounded,
+                                                    color: bronze,
+                                                    size: 17.sp,
+                                                  ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }),
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
